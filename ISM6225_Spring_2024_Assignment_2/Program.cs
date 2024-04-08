@@ -151,7 +151,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while removing duplicates.", ex);
             }
         }
-
+        // Time Complexity: O(n), Space Complexity: O(1)
 
         /*
         
@@ -216,6 +216,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while moving zeroes.", ex);
             }
         }
+        // Time Complexity: O(n), Space Complexity: O(1)
 
         /*
 
@@ -319,7 +320,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while executing the ThreeSum algorithm.", ex);
             }
         }
-
+        // Time Complexity: O(n^2), Space Complexity: O(logn) for sorting, additional space for result list
 
         /*
 
@@ -389,7 +390,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while finding the maximum consecutive ones.", ex);
             }
         }
-
+        // Time Complexity: O(n), Space Complexity: O(1)
 
         /*
 
@@ -447,7 +448,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while converting binary to decimal.", ex);
             }
         }
-
+        // Time Complexity: O(n), Space Complexity: O(1)
 
 
         /*
@@ -548,6 +549,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An unexpected error occurred while calculating the maximum gap.", ex);
             }
         }
+        // Time Complexity: O(nk) which still is a linear time, Space Complexity: O(n)
 
         /*
 
@@ -612,7 +614,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while calculating the largest perimeter.", ex);
             }
         }
-
+        // Time Complexity: O(n log n), Space Complexity: O(1)
 
         /*
 
@@ -685,7 +687,7 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw new InvalidOperationException("An error occurred while removing occurrences.", ex);
             }
         }
-
+        // Time Complexity: O(n*m), Space Complexity: O(1)
 
         /* Inbuilt Functions - Don't Change the below functions */
         static string ConvertIListToNestedList(IList<IList<int>> input)
