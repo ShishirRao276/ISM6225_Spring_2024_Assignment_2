@@ -99,14 +99,59 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check for null input to prevent Null Pointer Exception
+                if (nums == null)
+                {
+                    throw new ArgumentNullException(nameof(nums), "Input array cannot be null.");
+                }
+
+                // If the array is empty, return 0 as there are no unique elements
+                if (nums.Length == 0)
+                {
+                    Console.WriteLine("The array is empty.");
+                    return 0;
+                }
+
+                // Initialize uniqueIndex at 1 since the first element is always unique
+                int uniqueIndex = 1;
+
+                // Iterate through the array starting from the second element
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // If the current element is not equal to the previous one, it's unique
+                    if (nums[i] != nums[i - 1])
+                    {
+                        // Move unique element to the next position in the unique portion of the array
+                        nums[uniqueIndex] = nums[i];
+                        // Increment uniqueIndex to expand the unique portion
+                        uniqueIndex++;
+                    }
+                }
+
+                // Print the modified array with unique elements followed by placeholders
+                Console.Write("The modified array is: ");
+                for (int i = 0; i < uniqueIndex; i++)
+                {
+                    Console.Write(nums[i] + " ");
+                }
+                // Fill the rest of the array with "*" to indicate removed duplicates
+                for (int i = uniqueIndex; i < nums.Length; i++)
+                {
+                    Console.Write("*" + " ");
+                }
+                Console.WriteLine();
+
+                // Print the total number of unique elements
+                Console.Write("The Total Number of Unique Elements in the Array are: ");
+                return uniqueIndex;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception details or throw a custom exception if necessary
+                throw new InvalidOperationException("An error occurred while removing duplicates.", ex);
             }
         }
+
 
         /*
         
@@ -134,12 +179,41 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                // Check for null input to prevent NullReferenceException
+                if (nums == null)
+                {
+                    throw new ArgumentNullException(nameof(nums), "Input array cannot be null.");
+                }
+
+                // Initialize nonZeroIndex to keep track of the position to place the next non-zero element
+                int nonZeroIndex = 0;
+
+                // Iterate through the array
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    // If the current element is not zero, move it to the position indicated by nonZeroIndex
+                    if (nums[i] != 0)
+                    {
+                        nums[nonZeroIndex] = nums[i];
+                        nonZeroIndex++;
+                    }
+                }
+
+                // After all non-zero elements have been moved to the beginning,
+                // fill the remainder of the array with zeroes
+                for (int i = nonZeroIndex; i < nums.Length; i++)
+                {
+                    nums[i] = 0;
+                }
+
+                Console.Write("Array after moving zeroes: ");
+                // Return the modified array with zeroes moved to the end
+                return nums;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception details or throw a custom exception if necessary
+                throw new InvalidOperationException("An error occurred while moving zeroes.", ex);
             }
         }
 
@@ -185,14 +259,67 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+                // Check for null input to prevent Null Pointer Exception
+                if (nums == null)
+                {
+                    throw new ArgumentNullException(nameof(nums), "Input array cannot be null.");
+                }
+
+                // Sort the array to facilitate finding triplets and skipping duplicates.
+                Array.Sort(nums);
+                List<IList<int>> result = new List<IList<int>>();
+
+                // Iterate over each number in the array.
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    // Skip duplicate elements to avoid duplicate triplets.
+                    if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+                    // Initialize two pointers for the current element.
+                    int left = i + 1, right = nums.Length - 1;
+                    while (left < right)
+                    {
+                        // Calculate the sum of the current triplet.
+                        int currentSum = nums[i] + nums[left] + nums[right];
+
+                        // If the sum is less than zero, increase the sum by moving the left pointer to the right.
+                        if (currentSum < 0)
+                        {
+                            left++;
+                            // If the sum is more than zero, decrease the sum by moving the right pointer to the left.
+                        }
+                        else if (currentSum > 0)
+                        {
+                            right--;
+                        }
+                        else
+                        {
+                            // A valid triplet that sums up to zero has been found.
+                            result.Add(new List<int> { nums[i], nums[left], nums[right] });
+
+                            // Skip all duplicate values for the left pointer.
+                            while (left < right && nums[left] == nums[left + 1]) left++;
+                            // Skip all duplicate values for the right pointer.
+                            while (left < right && nums[right] == nums[right - 1]) right--;
+
+                            // Prepare for the next iteration to find new triplets.
+                            left++;
+                            right--;
+                        }
+                    }
+                }
+
+                Console.Write("Triplets summing to zero: ");
+                // Return the list of found triplets.
+                return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Properly handle exceptions by logging or throwing a more descriptive error.
+                throw new InvalidOperationException("An error occurred while executing the ThreeSum algorithm.", ex);
             }
         }
+
 
         /*
 
@@ -220,14 +347,49 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check for null input to ensure the method does not throw a NullReferenceException
+                if (nums == null)
+                {
+                    throw new ArgumentNullException(nameof(nums), "Input array cannot be null.");
+                }
+
+                // Initialize variables to track the maximum consecutive ones found and the current streak of ones.
+                // Tracks the current streak of consecutive ones.
+                int maxConsecutiveOnes = 0;
+                // Stores the maximum streak found so far.
+                int currentMax = 0; 
+
+                // Iterate over each element in the array.
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    // If the current element is 1, increment the streak counter.
+                    if (nums[i] == 1)
+                    {
+                        // Increment the current streak.
+                        maxConsecutiveOnes++; 
+                        // Update currentMax if the current streak is the new maximum.
+                        if (maxConsecutiveOnes > currentMax)
+                        {
+                            currentMax = maxConsecutiveOnes;
+                        }
+                    }
+                    else
+                    {
+                        // If the current element is not 1, reset the streak counter.
+                        maxConsecutiveOnes = 0;
+                    }
+                }
+                Console.Write("Maximum consecutive ones:");
+                // Return the maximum streak of consecutive ones found in the array.
+                return currentMax;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Catch any unexpected exceptions, providing a more informative message and context.
+                throw new InvalidOperationException("An error occurred while finding the maximum consecutive ones.", ex);
             }
         }
+
 
         /*
 
@@ -256,14 +418,37 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Convert the binary integer to a string to iterate over each digit
+                string input = binary.ToString();
+
+                // Initialize the decimalNumber to store the decimal equivalent of the binary input
+                int decimalNumber = 0;
+                // Initialize baseValue to 1, representing the base value of the least significant bit (2^0)
+                int baseValue = 1;
+
+                // Iterate over the input string from right (least significant bit) to left (most significant bit)
+                for (int i = input.Length - 1; i >= 0; i--)
+                {
+                    // Check if the current character is '1'
+                    if (input[i] == '1')
+                    {
+                        // If '1', add the current base value to decimalNumber
+                        decimalNumber += baseValue;
+                    }
+                    // Double the base value for the next iteration to represent the next higher power of 2
+                    baseValue *= 2;
+                }
+                Console.Write("Decimal value: ");
+                return decimalNumber;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception details or throw a custom exception if necessary.
+                throw new InvalidOperationException("An error occurred while converting binary to decimal.", ex);
             }
         }
+
+
 
         /*
 
@@ -294,12 +479,73 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check for null input to ensure the method does not throw a NullReferenceException
+                if (nums == null)
+                {
+                    throw new ArgumentNullException(nameof(nums), "Input array cannot be null.");
+                }
+                if (nums.Length < 2)
+                {
+                    Console.Write("Maximum gap:");
+                    return 0;
+                }
+
+                int max = nums[0];
+                foreach (int num in nums)
+                {
+                    if (num > max) max = num;
+                }
+
+                // Arrays for Radix Sort
+                int[] output = new int[nums.Length];
+                int[] count = new int[10]; // Since we are dealing with decimal numbers
+
+                // Start from the least significant digit and move towards the most significant
+                for (int exp = 1; max / exp > 0; exp *= 10)
+                {
+                    Array.Fill(count, 0);
+
+                    // Count occurrences of the current digit
+                    for (int i = 0; i < nums.Length; i++)
+                    {
+                        count[(nums[i] / exp) % 10]++;
+                    }
+
+                    // Adjust count[i] so it contains the actual position of this digit in output[]
+                    for (int i = 1; i < 10; i++)
+                    {
+                        count[i] += count[i - 1];
+                    }
+
+                    // Build the output array
+                    for (int i = nums.Length - 1; i >= 0; i--)
+                    {
+                        output[count[(nums[i] / exp) % 10] - 1] = nums[i];
+                        count[(nums[i] / exp) % 10]--;
+                    }
+
+                    // Copy the output array to nums, so nums now contains sorted numbers up to current digit
+                    for (int i = 0; i < nums.Length; i++)
+                    {
+                        nums[i] = output[i];
+                    }
+                }
+
+                // After sorting, find the maximum gap
+                int maxGap = 0;
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    maxGap = Math.Max(maxGap, nums[i] - nums[i - 1]);
+                }
+
+                Console.Write("Maximum gap:");
+                // Return the maximum gap found
+                return maxGap;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception details or throw a custom exception if necessary.
+                throw new InvalidOperationException("An unexpected error occurred while calculating the maximum gap.", ex);
             }
         }
 
@@ -334,14 +580,39 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
+                // Check for a null or too small array to form a triangle.
+                if (nums == null || nums.Length < 3)
+                {
+                    throw new ArgumentException("Array must contain at least three elements.", nameof(nums));
+                }
+
+                // Sort the array in ascending order to easily find the largest sides.
+                Array.Sort(nums);
+
+                Console.Write("Largest perimeter:");
+                // Iterate from the end of the array towards the beginning to check for possible triangles.
+                // Start from the third-last element, as we need at least three sides to form a triangle.
+                for (int i = nums.Length - 1; i >= 2; i--)
+                {
+                    // Check if the current element and the two preceding it can form a triangle.
+                    // A triangle is valid if the sum of the lengths of the two shorter sides is greater than the length of the longest side.
+                    if (nums[i] < nums[i - 1] + nums[i - 2])
+                    {
+                        // If a valid triangle is found, return its perimeter.
+                        return nums[i] + nums[i - 1] + nums[i - 2];
+                    }
+                }
+
+                // If no valid triangle can be formed, return 0.
                 return 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Catch any unexpected exceptions, providing a more informative message and context.
+                throw new InvalidOperationException("An error occurred while calculating the largest perimeter.", ex);
             }
         }
+
 
         /*
 
@@ -388,14 +659,33 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                // Check for null or empty inputs to ensure validity.
+                if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(part))
+                {
+                    throw new ArgumentException("Input strings cannot be null or empty.");
+                }
+
+                // Index to store the position of 'part' in 's'.
+                int index;
+
+                // Continue the loop as long as 'part' is found in 's'.
+                while ((index = s.IndexOf(part)) != -1)
+                {
+                    // Remove 'part' from 's' by concatenating the substring before 'part' and the substring after 'part'.
+                    s = s.Substring(0, index) + s.Substring(index + part.Length);
+                }
+
+                Console.Write("String after removing occurrences:");
+                // Return the modified string 's' after removing all occurrences of 'part'.
+                return s;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Catch any unexpected exceptions, providing a more informative message and context.
+                throw new InvalidOperationException("An error occurred while removing occurrences.", ex);
             }
         }
+
 
         /* Inbuilt Functions - Don't Change the below functions */
         static string ConvertIListToNestedList(IList<IList<int>> input)
